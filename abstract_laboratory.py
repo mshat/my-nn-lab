@@ -1,7 +1,7 @@
 import abc
 
 import numpy as np
-from models import Layer, NN, TrainedLayer, TrainedNN
+from models import NeuralLayer, NN, LinearLayer, TrainedNN
 
 from files_io import save_in_file, load_trained_nn
 

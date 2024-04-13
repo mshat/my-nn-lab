@@ -1,4 +1,4 @@
-from models import Layer, NN
+from models import NeuralLayer, NN
 from files_io import load_trained_nn
 
 from numbers_recognition import NumRecTrainer, NumRecLaboratory
@@ -11,7 +11,7 @@ def experiment1():
     trainer = NumRecTrainer(epochs=3)
     laboratory = NumRecLaboratory(trainer)
 
-    nn = NN([Layer(784), Layer(20), Layer(10),])
+    nn = NN([NeuralLayer(784), NeuralLayer(20), NeuralLayer(10), ])
     # nn = NN([Layer(784), Layer(50), Layer(10), ])
     # nn = NN([Layer(784), Layer(10)])
 

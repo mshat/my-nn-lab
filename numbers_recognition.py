@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from tools import sigmoid, predict_sample
-from models import Layer, NN, TrainedLayer, TrainedNN
+from models import NeuralLayer, NN, LinearLayer, TrainedNN
 from abstracttrainer import AbstractTrainer
 from abstract_dataset_loader import AbstractDatasetLoader, Dataset
 from abstract_laboratory import AbstractLaboratory
@@ -78,7 +78,7 @@ class NumRecTrainer(AbstractTrainer):
             print(f"Accuracy: {round((e_correct / parameter_count) * 100, 3)}%")
             e_loss = 0
             e_correct = 0
-        return TrainedNN([TrainedLayer(bias, weights) for bias, weights in zip(nn.bias, nn.weights)])
+        return TrainedNN([LinearLayer(bias, weights) for bias, weights in zip(nn.bias, nn.weights)])
 
 
 class NumRecLaboratory(AbstractLaboratory):
@@ -108,25 +108,25 @@ class NumRecLaboratory(AbstractLaboratory):
 
     def show_layer_synapses(self, nn: TrainedNN, layer_index: int, limit=100) -> None:
         last_layer = nn.layers[layer_index]
-        n_synapses = last_layer.weights.shape[0]
-        n_parameters = last_layer.weights.shape[1]
+        neurons_count = last_layer.output_dim_count
+        synapses_count = last_layer.input_dim_count
 
         # можно ли представить синапсы в виде квадратного массива
-        if (frame_height_width := math.isqrt(n_parameters)) ** 2 != n_parameters:
+        if (frame_height_width := math.isqrt(synapses_count)) ** 2 != synapses_count:
             return
 
         neurons = [
                       np.reshape(last_layer.weights[i] + last_layer.bias[i], (frame_height_width, frame_height_width))
-                      for i in range(n_synapses)
+                      for i in range(neurons_count)
                   ][:limit]
         visualize_synapses(neurons)
 
     def show_synapse(self, nn: TrainedNN, layer_index: int, sinaps_index: int) -> None:
         layer = nn.layers[layer_index]
-        n_parameters = layer.weights.shape[1]
+        synapses_count = layer.input_dim_count
 
         # можно ли представить синапсы в виде квадратного массива
-        if (frame_height_width := math.isqrt(n_parameters)) ** 2 != n_parameters:
+        if (frame_height_width := math.isqrt(synapses_count)) ** 2 != synapses_count:
             return
 
         neuron = np.reshape(
